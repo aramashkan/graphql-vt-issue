@@ -1,0 +1,19 @@
+---
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: graphql-vt-issue
+  labels:
+    app.kubernetes.io/name: graphql-vt-issue
+build:
+  artifacts:
+    - image: com.example.graphql/graphql-vt-issue
+      jib: {}
+  local:
+    push: false
+manifests:
+  kustomize:
+    paths:
+      - k8s/dev
+deploy:
+  tolerateFailuresUntilDeadline: true

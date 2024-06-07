@@ -1,0 +1,11 @@
+type Query {
+    messages: IncomingMessage!
+}
+
+type Subscription {
+    messages: IncomingMessage!
+}
+
+type IncomingMessage {
+    text: String!
+}

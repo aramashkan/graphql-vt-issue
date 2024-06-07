@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: graphql-vt-issue
+  graphql:
+    path: /api/graphql
+    schema:
+      locations:
+        - classpath*:graphql/**/
+    websocket:
+      path: /api/graphql
+    graphiql:
+      enabled: true
+      path: /api/docs/graphiql
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: 'true'
+      show-details: always
+  server:
+    port: '8181'
+  endpoints:
+    web:
+      exposure:
+        include: 'health,prometheus'

@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-with-vt
+  labels:
+    app.kubernetes.io/name: graphql-vt-issue
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: graphql-vt-issue
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: graphql-vt-issue
+    spec:
+      containers:
+        - name: graphql-with-vt
+          image: com.example.graphql/graphql-vt-issue
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+              value: optional:configtree:/config.d/*/
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
+            limits:
+              cpu: "1"
+              memory: "500Mi"
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8181
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 120
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8181
+              scheme: HTTP
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8181
+              scheme: HTTP
+            periodSeconds: 30
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            # reads: application.yaml
+            - name: app-config
+              mountPath: /config
+              readOnly: true
+            - name: temp
+              mountPath: /tmp
+      volumes:
+        - name: app-config
+          secret:
+            secretName: graphql-with-vt-config
+        - name: temp
+          emptyDir:
+            sizeLimit: 1G

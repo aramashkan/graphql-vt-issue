@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-without-vt
+  labels:
+    app.kubernetes.io/name: graphql-vt-issue
+  annotations:
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8181"
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: graphql-vt-issue
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

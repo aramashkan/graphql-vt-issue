@@ -1,0 +1,6 @@
+# In cluster overrides only - edit src/main/resources/application-development.yaml to configure common dev props
+---
+spring:
+  threads:
+    virtual:
+      enabled: true
