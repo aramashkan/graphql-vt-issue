@@ -14,5 +14,5 @@ spec:
     app.kubernetes.io/name: graphql-vt-issue
   ports:
     - name: http
-      port: 8080
+      port: 8081
       targetPort: http

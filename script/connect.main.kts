@@ -17,7 +17,7 @@ import kotlinx.coroutines.runBlocking
 while (true) {
     runBlocking {
         coroutineScope {
-            launch { subscribe("without-vt","ws://localhost:8080/api/graphql") }
+            launch { subscribe("without-vt","ws://localhost:8082/api/graphql") }
             launch { subscribe("with-vt","ws://localhost:8081/api/graphql") }
             delay(30000)
         }
